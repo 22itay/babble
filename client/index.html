@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+
+<body>
+    <div class="FlexGrid u-fullSize">
+        <header class="Head u-fullwidth">
+            <img src="images/logo.png" class="Head-logo">
+            <h1 class="Head-title u-hiddenReadeable">Babble</h1>
+        </header>
+        <!-- /header -->
+
+        <div class="FlexGrid-row u-flex1 MainContainer" tabindex="1">
+            <nav class="Nav"></nav>
+            <!-- /nav -->
+
+            <main class="Main u-flex1 FlexGrid u-fullwidth">
+                <header class="Main-head FlexGrid-row u-alignItemsCenter u-flexJustifySpaceBetween u-fullwidth">
+                    <h2 class="ChatTitle u-flex1 js-chatTitle">Vegans</h2>
+                    <dl class="ChatStats">
+                        <dt>
+                            <span class="u-hidden">Messages: </span>
+                        </dt>
+                        <dd>
+                            <img src="images/chat.svg" class="ChatStats-img" />
+                            <span class="js-stats1 ChatStats-text">7</span>
+                        </dd>
+
+                        <dt>
+                            <span class="u-hidden">People: </span>
+                        </dt>
+                        <dd>
+                            <img src="images/person.svg" class="ChatStats-img ChatStats-img--person" />
+                            <span class="js-stats2 ChatStats-text">6</span>
+                        </dd>
+                    </dl>
+                </header>
+                <!-- /main.header -->
+
+                <ol class="ChatView">
+                    <li class="Message" id="msg-415">
+                        <img src="http://i.picresize.com/images/2017/08/11/qXgoP.png" alt="" class="Message-im" />
+                        <div class="MessageInner" tabindex="0">
+                            <div class="MessageInner-top">
+                                <cite class="Message-author">cN3rd</cite>
+                                <time class="Message-time" datetime="2001-05-15T19:00">19:00</time>
+                                <button class="Message-delBtn" tabindex="0">X</button>
+                            </div>
+                            <div class="MessageBody">
+                                This is a test Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ut eum dolore dignissimos. Eligendi assumenda dignissimos
+                                molestias ipsa suscipit tempora sed, cum officiis, et similique! Sed quasi asperiores, non
+                                iste reprehenderit ipsam quae voluptas eos consequatur aliquid ut iusto nihil inventore saepe
+                                neque? Harum accusamus earum blanditiis assumenda, non illum molestias possimus corporis,
+                                dignissimos recusandae, ex ab nihil deserunt dolor corrupti ipsum autem, facere. Iure maxime,
+                                saepe accusamus, quasi quidem commodi? Qui fugiat nulla, sint reiciendis, dolore temporibus,
+                                iusto, voluptatum quidem maiores pariatur cupiditate iure officia vitae exercitationem quisquam
+                                repellat alias libero doloribus dignissimos illum magnam corporis! Itaque assumenda dolore
+                                eaque odit vel inventore incidunt debitis cum officia alias maxime nisi quae, ad perferendis
+                                sed doloremque ratione quo est culpa tempora pariatur nostrum. Minima officia, at quibusdam
+                                accusamus sint, voluptatum ratione numquam neque. Nostrum facere pariatur ea earum porro
+                                rerum perferendis optio placeat est accusamus dicta debitis eveniet, vitae, in perspiciatis
+                                ad possimus eum ipsa aliquam sit expedita sequi incidunt? Numquam, quisquam officiis molestiae
+                                eos. Excepturi, libero recusandae nisi cum quis porro. Voluptatibus tenetur doloremque architecto
+                                nihil beatae, illum repellendus debitis placeat harum veritatis blanditiis, repellat assumenda
+                                officia animi soluta dolorem nulla! Vitae placeat in voluptates officia commodi atque odit
+                                voluptatem corporis architecto tenetur eveniet corrupti ea quo ipsam molestiae quis adipisci
+                                ut harum dolores, vel tempore quisquam voluptas porro et. Maiores laudantium reiciendis eum
+                                earum culpa dolores autem veritatis natus doloribus omnis eaque, ab consequatur corporis
+                                quod voluptatibus facere nesciunt eius repellendus sint blanditiis? Laboriosam quaerat accusamus
+                                reiciendis quod vitae consequuntur ut expedita cum labore.
+                            </div>
+                        </div>
+                    </li>
+                    <!-- /message -->
+                </ol>
+                <!-- /chatview -->
+
+                <form action="#" class="ChatSubmit">
+                    <textarea class="ChatSubmit-text"></textarea>
+                    <button type="submit" src="images/send.png" class="ChatSubmit-submit js-submit" aria-label="Submit" />
+                </form>
+                <!-- /sendmessage -->
+            </main>
+            <!-- /main -->
+        </div>
+        <script src="scripts/main.js"></script>
+    </div>
+
+    <div class="ModalContainer u-hidden" tabindex="1">
+        <section class="Modal">
+            <header class="ModalHeader FlexGrid-row">
+                <h1 class="ModalHeader-title">
+                    Example Modal
+                </h1>
+
+                <button class="ModalHeader-xbtn" aria-label="Close">X</button>
+            </header>
+        </section>
+    </div>
+    <!-- /modal -->
+</body>
+
+</html>

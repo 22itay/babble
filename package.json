@@ -1,0 +1,37 @@
+{
+  "name": "babble",
+  "version": "1.0.0",
+  "description": "Vegans - Babble by theAdc",
+  "main": "index.js",
+  "dependencies": {
+    "md5": "^2.2.1"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "mocha": "^3.5.0",
+    "node-sass": "^4.5.3",
+    "nodemon": "^1.11.0",
+    "sinon": "^3.2.1"
+  },
+  "scripts": {
+    "start": "echo \"start\"",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server-dev": "nodemon \"server/main.js\"",
+    "server-test": "mocha \"test/server\"",
+    "sass22": "node-sass client/styles/main.scss client/styles/main.css --watch",
+    "sass": "node-sass"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/22itay/babble.git"
+  },
+  "keywords": [
+    "babble"
+  ],
+  "author": "itay segev",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/22itay/babble/issues"
+  },
+  "homepage": "https://github.com/22itay/babble#readme"
+}

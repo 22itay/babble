@@ -1,0 +1,23 @@
+.FlexGrid {
+    display: flex;
+    flex-direction: column;
+
+    &-row {
+        display: flex;
+        flex-direction: row;
+    }
+}
+
+.u-flex1 {
+    flex:1;
+}
+
+.u-alignItemsCenter {
+    align-items: center;
+}
+.u-flexJustifySpaceBetween {
+    justify-content: space-between;
+}
+.u-flexRight {
+    margin-right: auto;
+}
