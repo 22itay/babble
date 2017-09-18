@@ -4,6 +4,7 @@
   "description": "Vegans - Babble by theAdc",
   "main": "index.js",
   "dependencies": {
+    "concurrently": "^3.5.0",
     "md5": "^2.2.1"
   },
   "devDependencies": {
@@ -14,8 +15,11 @@
     "sinon": "^3.2.1"
   },
   "scripts": {
-    "start": "echo \"start\"",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "concurrently \"node \\\"server/main.js\\\"\" \"http-server \\\"client/\\\"\"",
+    "test": "concurrently \"mocha --recursive \\\"test/server\\\"\" \"http-server -p 8081\"",
+    "client": "http-server \"client/\"",
+    "client-test": "http-server -p 8081",
+    "server": "node \"server/main.js\"",
     "server-dev": "nodemon \"server/main.js\"",
     "server-test": "mocha \"test/server\"",
     "sass22": "node-sass client/styles/main.scss client/styles/main.css --watch",
