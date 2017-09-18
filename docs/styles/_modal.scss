@@ -1,0 +1,53 @@
+.ModalContainer {
+    position: fixed;
+    background-color: rgba(0,0,0,0.2);
+
+    z-index: 5; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+
+    display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
+
+.Modal {
+    min-height: $babble-modal-minheight;
+    min-width: $babble-modal-minwidth;
+    background: $babble-light;
+    box-shadow: 0px 0px 50px 0px rgba(0, 0, 0, 0.2);
+    border-radius: $babble-modal-radius;
+}
+
+.ModalHeader {
+    border-top-left-radius: $babble-modal-radius;
+    border-top-right-radius: $babble-modal-radius;
+    height: $babble-modal-head-height;
+    background: $babble-dark;
+    color: $babble-light;
+    padding: 1rem;  
+
+    &-title {
+        font-weight: normal;
+        flex: 1;
+    }
+
+    &-xbtn {
+        background: transparent;
+        border: solid 1px $babble-light;
+        border-radius: 0.25rem;
+        color: $babble-light;
+        width: 2rem;
+        height: 2rem;
+        &:hover {
+            background: lighten($babble-dark, 20%);
+        }
+
+        &:active {
+            background: lighten($babble-dark, 10%);
+        }
+    }
+}

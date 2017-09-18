@@ -1,0 +1,185 @@
+@import "vars.scss";
+@import "resets.scss";
+@import "utils.scss";
+@import "grid.scss";
+@import "modal.scss";
+
+body {
+    background: $babble-light;
+    color: $babble-font-color;
+}
+
+.Head {
+    background: $babble-dark;
+    height: 5rem;
+    padding: 1rem;
+
+    &-logo {
+        height: 100%;
+        float: left;
+    }
+
+    &-title {
+        color: $babble-light;
+        font-weight: normal;
+    }
+}
+
+.MainContainer {
+    width: 100%;
+}
+
+.Main {
+    width: 100%;
+}
+
+.Main-head {
+    padding:1rem;
+}
+
+.ChatTitle {
+    font-weight: normal;
+    font-size: 1.75rem;
+}
+
+.ChatView {
+    flex:1;
+    overflow-y: scroll;
+}
+
+.ChatStats {
+    display: inline-table;
+    font-weight: bold;
+    color: #000;
+
+    &-img, &-text {
+        display: inline-block;
+        vertical-align: middle;
+        height: 1.2rem;
+        line-height: 1.2rem;
+        font-size: 0.9rem;
+    }
+
+    &-img--person {
+        margin-left: 0.5rem;
+        margin-right: -0.25rem;
+    }
+
+    dt,dd {
+        height: 100%;
+        display: inline-block;
+    }
+}
+.Message {
+    display: flex;
+    padding:1rem;
+    
+    &-im {
+        height: $babble-image-size;
+        border-radius: $babble-image-size;
+    }
+
+    &-author {
+        color: $babble-author-color;
+        text-decoration: none;
+        font-style: normal;
+        font-weight: bold;
+        margin-right: 0.5rem;
+    }
+
+    &-time {
+        color: $babble-send-time;
+        margin-right: 1rem;
+    }
+
+    &-delBtn {
+        border-width: 0px;
+        background: transparent;
+        font-weight: bold;
+        margin-left: auto;
+    }
+}
+.MessageInner {
+    border: 1px solid $babble-border;
+    background: $babble-message-bg;
+    margin-left: 1rem;
+    border-radius: $babble-message-radius;
+    padding: 1rem;
+    margin-right: $babble-message-marginright;
+
+    //min-width: $babble-message-minwidth;
+
+    .MessageInner-top {
+        display: flex;
+        align-content: center;
+        width: 100%;
+    }
+}
+
+.ChatSubmit {
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 1rem;
+
+    &-text {
+        height: calc(100% - 5rem);
+        width: 80%;
+        padding: 0.5rem;
+
+        color: inherit;
+        font-family: inherit;
+        font-size: inherit;
+        resize: none;
+        border-radius: $babble-message-radius;
+        border: 1px solid $babble-border;
+
+        &:focus {
+            outline: none;
+            border: 1px solid #4D90FE;
+        }
+    }
+
+    &-submit {
+        background: transparent url(../images/send.png) no-repeat;
+        background-size: contain;
+        background-position: middle center;
+        border-width: 0px;
+        width:10%;
+        max-width: 80px;
+        height: calc(85% - 5rem);
+        margin-left: 1rem;
+    }
+}
+
+@media only screen and (min-width: $babble-desktop-min) {
+    .Nav {
+        background: $babble-sidebar-green;
+        width: 15rem;
+    }
+    .ChatSubmit{
+        border: 1px solid $babble-border;
+        background: #fff;
+        margin: 0;
+        height: 100%;
+        max-height: 100px;
+
+        &-text {
+            flex:1;
+            width: auto;
+            height: calc(100% - 1em);
+            border-width: 0px;
+            border-radius: 0px;
+        }
+
+        &-submit {
+            min-height: 80%;
+            max-height: 150px;
+            margin: 0 1em;
+        }
+    }
+}
+
+// desktop
+/**/
