@@ -1,7 +1,7 @@
 
 var Babble = {
     counter: 0,
-    session: {
+    sessionData: {
         currentMessage: "",
         userInfo: {
             name: "",
@@ -44,6 +44,7 @@ var Babble = {
         Babble.request({
             method: 'GET',
             action: '/stats',
+            request_id: session.uuid,
             data: ''
         }).then(callback(returned_data));
     }
@@ -54,6 +55,9 @@ var Babble = {
             if (options.method === 'post') {
                 xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
             }
+            if (options.request_id) {
+                xhr.setRequestHeader("X-Request-Id", options.request_id);
+            }
             xhr.addEventListener('load', e => {
                 resolve(e.target.responseText);
             });
@@ -61,6 +65,44 @@ var Babble = {
         });
     }
 
-}; // Data object to save all chat logs
+}; 
+ Babble.host = "http://localhost:9000";
+ let lastSession = JSON.parse(localStorage.getItem("babble"));
+ if (lastSession)
+     sessionData = lastSession;
+
+    // if noting is in the local storage
+if (localStorage.getItem("babble") === null) {
+    localStorage.setItem('babble', JSON.stringify(sessionData));
+}
+Babble.register=function (userInfo) {
+    ajax({
+        method: "POST",
+        action: `${host}/login`,
+        data: JSON.stringify({ uuid: session.uuid })
+    });
+    sessionData.userInfo.name = userInfo.name;
+    sessionData.userInfo.email = userInfo.email;
+    localStorage.setItem('babble', JSON.stringify(sessionData));
+};
+Babble.polling= function(){
+    Babble.getMessages(counter, function (data) {
+        if (data.delete)
+            deleteMessageDOM(data.id);
+        else 
+        {
+            // update internal counter
+            counter += data.length;
+            // visuallly display on the DOM
+            data.forEach(function (message) {
+                addMessageDOM(message);
+            });
+        }
+        // call the next long poll
+        Babble.polling();
+    });
+}
+Babble.polling();
+// Data object to save all chat logs
 // messages: new Array() , users: new Array(),userCount:0,
 // Client code

@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "concurrently": "^3.5.0",
+    "http-server": "^0.10.0",
     "md5": "^2.2.1"
   },
   "devDependencies": {
