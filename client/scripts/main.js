@@ -16,6 +16,7 @@ var Babble = {
         Babble.request({
             method: 'GET',
             action: '/messages',
+            request_id: sessionData.uid,
             data: ''
         }).then(callback(returned_data));
 
@@ -30,6 +31,7 @@ var Babble = {
         Babble.request({
             method: 'POST',
             action: '/messages?counter=' + counter,
+            request_id: sessionData.uid,
             data: message//"{name:String, email:String, message:String, timestamp:Number(ms)}"
         }).then(callback(returned_data));
     },
@@ -37,6 +39,7 @@ var Babble = {
         Babble.request({
             method: 'DELETE',
             action: '/messages/:' + id,
+            request_id: sessionData.uid,
             data: ''
         }).then(callback(returned_data));
     },
@@ -44,7 +47,7 @@ var Babble = {
         Babble.request({
             method: 'GET',
             action: '/stats',
-            request_id: session.uuid,
+            request_id: sessionData.uid,
             data: ''
         }).then(callback(returned_data));
     }
@@ -79,7 +82,7 @@ Babble.register=function (userInfo) {
     ajax({
         method: "POST",
         action: `${host}/login`,
-        data: JSON.stringify({ uuid: session.uuid })
+        data: JSON.stringify({ uid:sessionData.uid })
     });
     sessionData.userInfo.name = userInfo.name;
     sessionData.userInfo.email = userInfo.email;
@@ -103,6 +106,28 @@ Babble.polling= function(){
     });
 }
 Babble.polling();
+
+ Babble.sendMessage= function(e, textarea) {
+    e.preventDefault(); // prevent refresh
+
+    if (textarea.value == "") {
+        alert("You can't have an empty message");
+        return;
+    }
+
+    let message ={
+        name: session.userInfo.name,
+        email: session.userInfo.email,
+        message: textarea.value,
+        timestamp: Date.now().toString(),
+        id: 0
+    };
+    Babble.postMessage(message, function (data) {
+        textarea.value = "";
+        textarea.style.height = "auto";
+    });
+}
+Babble.textarea = document.getElementById("newMessage-contents");
 // Data object to save all chat logs
 // messages: new Array() , users: new Array(),userCount:0,
 // Client code
