@@ -25,7 +25,7 @@ var Babble = {
     postMessage: function (message, callback) {//message:Object, callback:Function
         Babble.request({
             method: 'POST',
-            action: '/messages?counter=' + counter,
+            action: '/messages?counter=' + Babble.counter,
             request_id: Babble.sessionData.uid,
             data: message//"{name:String, email:String, message:String, timestamp:Number(ms)}"
         }).then(function(data) {
@@ -99,14 +99,14 @@ Babble.polling= function(){
     Babble.getMessages(Babble.counter, function (data) {
         console.log(data);
         if (data.delete)
-            deleteMessageDOM(data.id);
+            Babble.chatWindow.removeChild(document.getElementById("msg-" + data.id));
         else 
         {
             // update internal counter
             Babble.counter += data.length;
             // visuallly display on the DOM
             data.forEach(function (message) {
-                addMessageDOM(message);
+                addMessageDOM(message);//todo
             });
         }
         // call the next long poll
@@ -116,42 +116,29 @@ Babble.polling= function(){
 
 
 Babble.polling2= function(){
-        window.Babble.getStats(function (data) {
-        window.Babble.statsMessages.innerHTML = data.messages;
-        window.Babble.statsPeople.innerHTML = data.users;
-
-        polling2();
-    });
+        Babble.getStats(function (data) {
+            Babble.statsMessages.innerHTML = data.messages;
+            Babble.statsPeople.innerHTML = data.users;
+            polling2();
+        });
 }
 
- Babble.sendMessage= function(e, textarea) {
-    e.preventDefault(); // prevent refresh
+// Babble.sendMessage= 
 
-    if (textarea.value == "") {
-        alert("You can't have an empty message");
-        return;
-    }
-
-    let message ={
-        name: session.userInfo.name,
-        email: session.userInfo.email,
-        message: textarea.value,
-        timestamp: Date.now().toString(),
-        id: 0
-    };
-    Babble.postMessage(message, function (data) {
-        textarea.value = "";
-        textarea.style.height = "auto";
-    });
-}
-function onloadP(){
+Babble.onloadP=function(){
 
     // signup dialog
     let loginBtn = document.getElementById("js-loginBtn");
     let anonBtn = document.getElementById("js-stayAnonBtn");
-    let newMsgForm = document.getElementById("js-newMessage-form");//todo
-    let textarea = document.getElementById("newMessage-contents");//todo
-    
+    let ChatSubmitForm = document.getElementById("js-ChatSubmit-form");
+    let textarea = document.getElementById("js-newMessage-area");//todo
+    Babble.textarea = document.getElementById("js-newMessage-area");
+    let signupDialog = document.getElementById("js-signupDialog");
+
+    Babble.statsMessages=document.getElementById("js-stats-messages");
+    Babble.statsPeople=document.getElementById("js-stats-people");
+
+
     loginBtn.addEventListener("click", function (e) {
         e.preventDefault();
         Babble.register({
@@ -160,13 +147,44 @@ function onloadP(){
         });
         Babble.polling2();
         Babble.polling();
-        document.getElementById("js-signupDialog").classList.add("u-hidden");
+        signupDialog.classList.add("u-hidden");
+    });
+
+    anonBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+        window.Babble.register({
+            name: "",
+            email: ""
+        });
+        Babble.polling2();
+        Babble.polling();
+        signupDialog.classList.add("u-hidden");
     });
 
    
 
     
-    newMsgForm.addEventListener("submit", e => sendMessage(e, textarea));
+    ChatSubmitForm.addEventListener("submit",function(event) {
+        console.log(event);
+        event.preventDefault(); // prevent refresh
+   
+       if (textarea.value == "") {
+           alert("You can't have an empty message");
+           return;
+       }
+   
+       let message ={
+           name: Babble.sessionData.userInfo.name,
+           email: Babble.sessionData.userInfo.email,
+           message: textarea.value,
+           timestamp: Date.now().toString(),
+           id: 0
+       };
+       Babble.postMessage(message, function (data) {
+           textarea.value = "";
+           textarea.style.height = "auto";
+       });
+   });
     autoResize(textarea, 100, 300);
     // unload event listener
     window.addEventListener('beforeunload', function (event) {
@@ -181,14 +199,17 @@ function onloadP(){
 
         // disable login if already logged in
         if (Babble.sessionData.userInfo.email !== "") {
-            document.getElementById("js-signupDialog").remove();
+            signupDialog.remove();
             Babble.register(Babble.sessionData.userInfo);
-            initiateLongPolls();
+            Babble.polling2();
+            Babble.polling();
         }
     });
-}
+};
+Babble.onloadP();
 
-Babble.textarea = document.getElementById("newMessage-contents");
+
+
 // Data object to save all chat logs
 // messages: new Array() , users: new Array(),userCount:0,
 // Client code

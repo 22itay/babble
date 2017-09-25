@@ -5,8 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-
+    <title>Babble - Vegans</title>
     <link rel="stylesheet" href="styles/main.css">
 </head>
 
@@ -18,7 +17,7 @@
         </header>
         <!-- /header -->
 
-        <div class="FlexGrid-row u-flex1 MainContainer" tabindex="1">
+        <div class="FlexGrid-row u-flex1 MainContainer">
             <nav class="Nav"></nav>
             <!-- /nav -->
 
@@ -31,7 +30,7 @@
                         </dt>
                         <dd>
                             <img src="images/chat.svg" class="ChatStats-img" />
-                            <span class="js-stats1 ChatStats-text">7</span>
+                            <span class="ChatStats-text" id="js-stats-messages">0</span>
                         </dd>
 
                         <dt>
@@ -39,62 +38,30 @@
                         </dt>
                         <dd>
                             <img src="images/person.svg" class="ChatStats-img ChatStats-img--person" />
-                            <span class="js-stats2 ChatStats-text">6</span>
+                            <span class="ChatStats-text" id="js-stats-people">0</span>
                         </dd>
                     </dl>
                 </header>
                 <!-- /main.header -->
 
-                <ol class="ChatView">
-                    <li class="Message" id="msg-415">
-                        <img src="http://i.picresize.com/images/2017/08/11/qXgoP.png" alt="" class="Message-im" />
-                        <div class="MessageInner" tabindex="0">
-                            <div class="MessageInner-top">
-                                <cite class="Message-author">cN3rd</cite>
-                                <time class="Message-time" datetime="2001-05-15T19:00">19:00</time>
-                                <button class="Message-delBtn" tabindex="0">X</button>
-                            </div>
-                            <div class="MessageBody">
-                                This is a test Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ut eum dolore dignissimos. Eligendi assumenda dignissimos
-                                molestias ipsa suscipit tempora sed, cum officiis, et similique! Sed quasi asperiores, non
-                                iste reprehenderit ipsam quae voluptas eos consequatur aliquid ut iusto nihil inventore saepe
-                                neque? Harum accusamus earum blanditiis assumenda, non illum molestias possimus corporis,
-                                dignissimos recusandae, ex ab nihil deserunt dolor corrupti ipsum autem, facere. Iure maxime,
-                                saepe accusamus, quasi quidem commodi? Qui fugiat nulla, sint reiciendis, dolore temporibus,
-                                iusto, voluptatum quidem maiores pariatur cupiditate iure officia vitae exercitationem quisquam
-                                repellat alias libero doloribus dignissimos illum magnam corporis! Itaque assumenda dolore
-                                eaque odit vel inventore incidunt debitis cum officia alias maxime nisi quae, ad perferendis
-                                sed doloremque ratione quo est culpa tempora pariatur nostrum. Minima officia, at quibusdam
-                                accusamus sint, voluptatum ratione numquam neque. Nostrum facere pariatur ea earum porro
-                                rerum perferendis optio placeat est accusamus dicta debitis eveniet, vitae, in perspiciatis
-                                ad possimus eum ipsa aliquam sit expedita sequi incidunt? Numquam, quisquam officiis molestiae
-                                eos. Excepturi, libero recusandae nisi cum quis porro. Voluptatibus tenetur doloremque architecto
-                                nihil beatae, illum repellendus debitis placeat harum veritatis blanditiis, repellat assumenda
-                                officia animi soluta dolorem nulla! Vitae placeat in voluptates officia commodi atque odit
-                                voluptatem corporis architecto tenetur eveniet corrupti ea quo ipsam molestiae quis adipisci
-                                ut harum dolores, vel tempore quisquam voluptas porro et. Maiores laudantium reiciendis eum
-                                earum culpa dolores autem veritatis natus doloribus omnis eaque, ab consequatur corporis
-                                quod voluptatibus facere nesciunt eius repellendus sint blanditiis? Laboriosam quaerat accusamus
-                                reiciendis quod vitae consequuntur ut expedita cum labore.
-                            </div>
-                        </div>
-                    </li>
+                <ol class="ChatView" id="js-chatWindow" >
                     <!-- /message -->
                 </ol>
                 <!-- /chatview -->
 
-                <form action="#" class="ChatSubmit">
-                    <textarea class="ChatSubmit-text"></textarea>
+                <form id="js-ChatSubmit-form" method="POST" class="ChatSubmit">
+                        <label for="js-newMessage-area" class="u-display-hidden">Message Contents</label>
+                    <textarea id="js-newMessage-area" class="ChatSubmit-text" tabindex="0"></textarea>
                     <button type="submit" src="images/send.png" class="ChatSubmit-submit js-submit" aria-label="Submit" />
                 </form>
                 <!-- /sendmessage -->
             </main>
             <!-- /main -->
         </div>
-        <script src="scripts/main.js"></script>
+     
     </div>
 
-    <div class="ModalContainer u-hidden" tabindex="1">
+    <!--<div class="ModalContainer u-hidden" tabindex="1">
         <section class="Modal">
             <header class="ModalHeader FlexGrid-row">
                 <h1 class="ModalHeader-title">
@@ -104,8 +71,32 @@
                 <button class="ModalHeader-xbtn" aria-label="Close">X</button>
             </header>
         </section>
-    </div>
+    </div>-->
     <!-- /modal -->
+<!-- SignupDialog -->
+<div class="SignupDialog-container" id="js-signupDialog">
+    <div class="SignupDialog">
+        <h2 class="SignupDialog-header">
+            Who are you?
+        </h2>
+        <form method="post" class="SignupDialog-form">
+            <div class="SignupDialog-formRow">
+                <label for="signup-fullname">Full name:</label>
+                <input type="text" id="signup-fullname" name="signup-fullname" value="Alex Krul" />
+            </div>
+            <div class="SignupDialog-formRow">
+                <label for="signup-email">Email: </label>
+                <input type="email" id="signup-email" name="signup-email" value="alex_krul@gmail.com" />
+            </div>
+            <div class="SignupDialog-formRow SignupDialog-formRow--last">
+                <button type="button" class="SignupDialog-cancelBtn" id="js-stayAnonBtn">Stay Anonymous</button>
+                <button type="submit" class="SignupDialog-submitBtn" id="js-loginBtn">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- /SignupDialog -->
+    <script src="scripts/main.js"></script>
 </body>
 
 </html>
