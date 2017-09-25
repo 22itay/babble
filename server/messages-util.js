@@ -1,3 +1,4 @@
+'use strict';
 function addMessage(message) {
 
     message.id = lastMsId++;

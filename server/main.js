@@ -1,5 +1,5 @@
 
-
+'use strict';
 
 var http = require('http');
 var url = require('url');
@@ -75,7 +75,11 @@ function getStats(req, res, parsed_url) {
 }
 
 http.createServer(function (req, res) {
+    res.setHeader('Access-Control-Allow-Origin','*');
     if (req.method == "OPTIONS") {
+        console.log("OPTIONS OPTIONS OPTIONS");   
+        res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+        res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With,Access-Control-Allow-Headers,Access-Control-Request-Method');
         res.statusCode = 204;
         return res.end();
     }
@@ -109,7 +113,7 @@ http.createServer(function (req, res) {
 
         case "stats":
             if (req.method == "GET") {
-                get_stats(req, res, parsed_url);
+                getStats(req, res, parsed_url);
             }
             else {
                 // error
