@@ -2,7 +2,6 @@
 
 let assert = window.chai.assert;
 let sinon = window.sinon;
-let Babble = window.Babble;
 
 describe('LocalStorage', function () {
     it('should have one key named babble in json format', function () {

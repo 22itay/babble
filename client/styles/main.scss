@@ -183,3 +183,80 @@ body {
 
 // desktop
 /**/
+
+
+
+
+/*
+  Signup Dialog
+*/
+.SignupDialog-container {
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    background-color: #353744;
+    /* Fallback color */
+    background: rgba(53, 55, 68, 0.6);
+    /* Black w/ opacity */ }
+  
+  .SignupDialog {
+    width: 85%;
+    height: 85%;
+    max-height: 60%;
+    border: 1px solid #d7d7d7;
+    background: #f9f9f9;
+    padding: 1rem;
+    margin: 0 auto; }
+  
+  .SignupDialog input, .SignupDialog button {
+    border: 1px solid #d7d7d7;
+    font-family: "Nunito", Arial, sans-serif;
+    padding: 0.45rem;
+    margin: 0.45rem;
+    font-weight: bold; }
+    .SignupDialog input:last-child, .SignupDialog button:last-child {
+      margin-right: 0px; }
+  
+  .SignupDialog-header {
+    height: 2rem; }
+  
+  .SignupDialog-form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: calc(100% - 3rem); }
+  
+  .SignupDialog-formRow {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    margin: 1em 0; }
+  
+  .SignupDialog-formRow--last {
+    margin-top: auto;
+    flex-direction: row;
+    justify-content: flex-end;
+    margin-bottom: 0; }
+  
+  .SignupDialog-submitBtn {
+    background: #62bd61;
+    background: linear-gradient(to bottom, #7cd650, #48a371);
+    color: #ffffff; }
+    .SignupDialog-submitBtn:hover {
+      background: linear-gradient(to bottom, #9be079, #64ba8b); }
+    .SignupDialog-submitBtn:active {
+      background: linear-gradient(to bottom, #60c52e, #388058); }
+  
+  .SignupDialog-cancelBtn {
+    background: #c5c5c5;
+    background: linear-gradient(to bottom, #d4d4d4, #b5b5b5); }
+    .SignupDialog-cancelBtn:hover {
+      background: linear-gradient(to bottom, #eeeeee, #cfcfcf); }
+    .SignupDialog-cancelBtn:active {
+      background: linear-gradient(to bottom, #bbbbbb, #9c9c9c); }

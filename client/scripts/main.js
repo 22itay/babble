@@ -78,9 +78,10 @@ var Babble = {
  if (lastSession)
  Babble.sessionData = lastSession;
 
-       // generate UUID if you have none.
-       //TODO
-
+       // generate UID if you have none.
+       if (Babble.sessionData.uid === "" && !window.sinon) {
+        Babble.sessionData.uid=Babble.sessionData.userInfo.email||"ann@segev.tk";
+       }
     // if noting is in the local storage
 if (localStorage.getItem("babble") === null) {
     localStorage.setItem('babble', JSON.stringify(Babble.sessionData));
@@ -97,21 +98,67 @@ Babble.register=function (userInfo) {
 };
 Babble.polling= function(){
     Babble.getMessages(Babble.counter, function (data) {
-        console.log(data);
-        if (data.delete)
-            Babble.chatWindow.removeChild(document.getElementById("msg-" + data.id));
-        else 
+        if(data!=undefined&&data!="")
         {
-            // update internal counter
-            Babble.counter += data.length;
-            // visuallly display on the DOM
-            data.forEach(function (message) {
-                addMessageDOM(message);//todo
-            });
+            console.log(data);
+            if (data.delete)
+                Babble.chatWindow.removeChild(document.getElementById("msg-" + data.id));
+            else 
+            {
+                // update internal counter
+                Babble.counter += data.length;
+                // visuallly display on the DOM
+                data.forEach(function (message) {
+                    addMessageDOM(message);//todo
+                });
+            }
         }
         // call the next long poll
         Babble.polling();
     });
+}
+
+function addMessageDOM(message) {
+    // dirty hack to create the element
+    let date = new Date(message.timestamp * 1);
+    // handle button code
+    if (message.name !== "" && message.email !== "") {
+    } else {
+        message.name = "Anonymous";
+        message.imageUrl = "./images/anon.png";
+    }
+    
+    let buttoncode = "";
+    if (message.uid ===Babble.sessionData.uid) {
+        buttoncode = "\n<button class=\"Message-deleteBtn js-deleteMsgBtn\" aria-label=\"Delete Message #" + message.id + "\">X</button>";
+    }
+
+           
+    let tempDiv=document.createElement("div");
+    tempDiv.innerHTML = `<li class="Message" id="msg-${message.id}">
+                        <img src="${message.imageUrl}" alt="" class="Message-image" />
+                        <section class="Message-inner" tabindex="0">
+                            <header class="Message-innerHead FlexGridRow">
+                                <cite class="Message-author">${message.name}</cite>
+                                <time class="Message-time" datetime="${date.toISOString()}">${timeToTimestamp(date)}</time>${buttoncode}
+                            </header>
+                            <div class="Message-inner-contents">
+                                ${message.message.replace("\n", "<br>")}
+                            </div>
+                        </section>
+                    </li>`;
+ 
+    // delete button
+    let messageDelBtn = tempDiv.firstElementChild.getElementsByClassName("js-deleteMsgBtn")[0];
+    if (messageDelBtn) {
+        messageDelBtn.addEventListener("click", function () {
+            Babble.deleteMessage(message.id, function () { });
+        });
+    }
+
+    // append to chat window
+    Babble.chatWindow.appendChild(tempDiv.firstElementChild);
+    Babble.chatContainer.scrollTop = Babble.chatWindow.scrollHeight;
 }
 
 

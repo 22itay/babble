@@ -8,7 +8,7 @@ function addMessage(message) {
     return lastMsId;
 }
 function getMessages(counter) {
-    return messages.slice(counter);
+    return messages.slice(counter)||{};
 }
 function deleteMessage(id) {
     let msId = messages.findIndex(ms => ms.id === +id);
