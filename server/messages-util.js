@@ -1,7 +1,7 @@
 'use strict';
 function addMessage(message) {
 
-    message.id = lastMsId++;
+    message.id = ++lastMsId;
     messages.push(message);
 
     // return the msId.
@@ -25,6 +25,6 @@ module.exports = {
     deleteMessage: deleteMessage,
     count: () => messages.length
 }
-let lastMsId = 0;
+let lastMsId = -1;
 let messages = [];
 let d = { name: "String", email: "String", message: "String", timestamp: "Number(ms)" } 

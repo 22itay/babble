@@ -31,7 +31,6 @@ function getMessages(req, res, parsed_url) {
                 res.end(JSON.stringify({ delete: true, id: mesId }));
             });
             console.log("mes segev segev");
-            console.log(mes);
             event.once("add", function (mes) {
 
                 mes=mes||{};
@@ -39,34 +38,41 @@ function getMessages(req, res, parsed_url) {
             });
         }
         else {
-            res.json(messages.getMessages(+x));
+            res.end(JSON.stringify(messages.getMessages(+x)));
         }
-        statEmitter.emit("stats", "");
+        statEvent.emit("stats", "");
     }
 }
 
 function postMessage(req, res, parsed_url) {
     // https://nodejs.org/en/docs/guides/anatomy-of-an-http-transaction/
     // read json data (for post requests)
-    let body = [];
-    request.on('data', (chunk) => {
+    let body = [];    
+    req.on('data', (chunk) => {
         body.push(chunk);
+            // Too much POST data, kill the connection!
+            // 1e6 === 1 * Math.pow(10, 6) === 1 * 1000000 ~~~ 1MB
+            if (body.length > 1e6)
+            request.connection.destroy();
     }).on('end', () => {
-        req.body = Buffer.concat(body).toString();
         // at this point, `body` has the entire request body stored in it as a string
         // here
+        body = Buffer.concat(body).toString();        
+        req.body = JSON.parse(body);
+        
+
         messages.addMessage(req.body);
         let message = req.body;
-        message.uid = req.get("X-Request-Id");
-        messages.setSender(message.id, message.uid);//////
-        message.imageUrl = `http://gravatar.com/avatar/${md5(message.email.trim().toLowerCase())}`;
-
+        //message.uid = req.headers("X-Request-Id");
+        //messages.setSender(message.id, message.uid);//////
+        message.imageUrl =getGravatar(message.email);
+     
 
         event.emit("add", message);
         statEvent.emit("stats");
     
         // notify submitter
-        res.json({ id: String(message.id) });
+        res.end(JSON.stringify({ id: String(message.id) }));
     });
 
 
@@ -91,12 +97,15 @@ function deleteMessage(req, res, parsed_url) {
 }
 
 function getStats(req, res, parsed_url) {
+
     statEvent.once("stats", function (data) {
+        let re={
+            users: users.size,
+            messages: messages.count()
+        }
+        console.log(re);
         res.end(JSON.stringify(
-            {
-                users: users.size,
-                messages: messages.count()
-            }
+            re
         ));
     });
 }
@@ -115,7 +124,6 @@ function logout(req, res, parsed_url) {
 
 http.createServer(function (req, res) {
     res.setHeader('Access-Control-Allow-Origin','*');
-
     if (req.method == "OPTIONS") {
         console.log("OPTIONS OPTIONS OPTIONS");
         res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
@@ -147,7 +155,7 @@ http.createServer(function (req, res) {
                     deleteMessage(req, res, parsed_url);
                     break;
                 default:
-                    // error
+                    // 405
                     break;
             }
             break;
@@ -155,15 +163,19 @@ http.createServer(function (req, res) {
         case "stats":
             if (req.method == "GET")
                 getStats(req, res, parsed_url);
+            // 405
             break;
         case "login":
             if (req.method == "POST")
                 login(req, res, parsed_url);
+            // 405
         case "logout":
             if (req.method == "POST") 
                 logout(req, res, parsed_url);
+            // 405
         default:
             // 404.
+            
             break;
     }
 

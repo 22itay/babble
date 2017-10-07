@@ -15,21 +15,21 @@ var Babble = {
     getMessages: function (counter, callback) {//counter:Number, callback:Function
         Babble.request({
             method: 'GET',
-            action: '/messages',
+            action: '/messages?counter=' + Babble.counter,
             request_id: Babble.sessionData.uid,
             data: ''
         }).then(function(data) {
-            callback(data);
+            callback(JSON.parse(data));
           });
     },
     postMessage: function (message, callback) {//message:Object, callback:Function
         Babble.request({
             method: 'POST',
-            action: '/messages?counter=' + Babble.counter,
+            action: '/messages',
             request_id: Babble.sessionData.uid,
-            data: message//"{name:String, email:String, message:String, timestamp:Number(ms)}"
+            data: JSON.stringify(message)//"{name:String, email:String, message:String, timestamp:Number(ms)}"
         }).then(function(data) {
-            callback(data);
+            callback(JSON.parse(data));
           });
     },
     deleteMessage: function (id, callback) {//id:String, callback:Function
@@ -39,7 +39,7 @@ var Babble = {
             request_id: Babble.sessionData.uid,
             data: ''
         }).then(function(data) {
-            callback(data);
+            callback(JSON.parse(data));
           });
     },
     getStats: function (callback) {//Function
@@ -49,7 +49,7 @@ var Babble = {
             request_id: Babble.sessionData.uid,
             data: ''
         }).then(function(data) {
-            callback(data);
+            callback(JSON.parse(data));
           });
     }
     , request: function (options) {
@@ -158,7 +158,7 @@ function addMessageDOM(message) {
 
     // append to chat window
     Babble.chatWindow.appendChild(tempDiv.firstElementChild);
-    Babble.chatContainer.scrollTop = Babble.chatWindow.scrollHeight;
+    //Babble.chatContainer.scrollTop = Babble.chatWindow.scrollHeight;
 }
 
 
@@ -166,7 +166,7 @@ Babble.polling2= function(){
         Babble.getStats(function (data) {
             Babble.statsMessages.innerHTML = data.messages;
             Babble.statsPeople.innerHTML = data.users;
-            polling2();
+           Babble.polling2();
         });
 }
 
@@ -178,8 +178,8 @@ Babble.onloadP=function(){
     let loginBtn = document.getElementById("js-loginBtn");
     let anonBtn = document.getElementById("js-stayAnonBtn");
     let ChatSubmitForm = document.getElementById("js-ChatSubmit-form");
-    let textarea = document.getElementById("js-newMessage-area");//todo
-    Babble.textarea = document.getElementById("js-newMessage-area");
+    Babble.chatWindow = document.getElementById("js-chatWindow");
+    let textarea = document.getElementById("js-newMessage-area");
     let signupDialog = document.getElementById("js-signupDialog");
 
     Babble.statsMessages=document.getElementById("js-stats-messages");
@@ -275,4 +275,10 @@ function autoResize(elem, minHeight, maxHeight) {
         if (elem.scrollHeight >= maxHeight)
             elem.style.height = `${maxHeight}px`;
     });
+}
+
+function timeToTimestamp(date) {
+    let hours = ("0" + date.getHours()).slice(-2);
+    let minutes = ("0" + date.getMinutes()).slice(-2);
+    return hours + ":" + minutes;
 }
