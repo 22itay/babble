@@ -16,29 +16,28 @@ event.setMaxListeners(0);
 statEvent.setMaxListeners(0);
 
 function getMessages(req, res, parsed_url) {
-    console.log(parsed_url);
+    console.log("getMessages_s");
     let x = parsed_url.query.counter;
-    console.log(x);
     if (!x || isNaN(x))
-        res.end();
+        return;
     else {
-        console.log("good");
-        console.log(x);
-
+        res.statusCode =200;
         if (+x >= messages.count()) {
             event.once("del", function (mesId) {
                 statEvent.emit("stats", "");
-                res.end(JSON.stringify({ delete: true, id: mesId }));
+                res.write(JSON.stringify({ delete: true, id: mesId }));
+                res.end();
             });
-            console.log("mes segev segev");
             event.once("add", function (mes) {
 
-                mes=mes||{};
-                res.end(JSON.stringify([mes]));
+                //mes=mes||{};
+                res.write(JSON.stringify([mes]));
+                res.end();
             });
         }
         else {
-            res.end(JSON.stringify(messages.getMessages(+x)));
+            res.write(JSON.stringify(messages.getMessages(+x)));
+            res.end();
         }
         statEvent.emit("stats", "");
     }
@@ -47,6 +46,7 @@ function getMessages(req, res, parsed_url) {
 function postMessage(req, res, parsed_url) {
     // https://nodejs.org/en/docs/guides/anatomy-of-an-http-transaction/
     // read json data (for post requests)
+    console.log("postMessage_s");
     let body = [];    
     req.on('data', (chunk) => {
         body.push(chunk);
@@ -59,8 +59,8 @@ function postMessage(req, res, parsed_url) {
         // here
         body = Buffer.concat(body).toString();        
         req.body = JSON.parse(body);
-        
-
+        console.log("data-")
+        console.log(req.body);
         messages.addMessage(req.body);
         let message = req.body;
         //message.uid = req.headers("X-Request-Id");
@@ -72,7 +72,10 @@ function postMessage(req, res, parsed_url) {
         statEvent.emit("stats");
     
         // notify submitter
-        res.end(JSON.stringify({ id: String(message.id) }));
+        res.write(JSON.stringify({ id: String(message.id) }));
+        res.statusCode =200;
+        res.end();
+        console.log("postMessage_end");
     });
 
 
@@ -84,48 +87,65 @@ function postMessage(req, res, parsed_url) {
 }
 
 function deleteMessage(req, res, parsed_url) {
-    Number.isInteger(+req.params.id)//"an id is required"
-    messages.find(+req.params.id)//"message does not exist"
-    messages.find(+req.params.id).getSender() === req.get("X-Request-Id")//"user cannot delete messages he doesn't own."
+    console.log("deleteMessage_s");
+    let id=+parsed_url.parts[1];
+    if(!id||!Number.isInteger(id)){
+        res.statusCode=405;
+        res.write(JSON.stringify(false));
+        return res.end();
+    }
 
-    if (messages.deleteMessage(req.params.id)) {
-        event.emit("del", +req.params.id);//???
-        statEvent.emit("stats", "");
-        res.end(JSON.stringify(true));
+   // messages.find(id).getSender() === req.get("X-Request-Id")//"user cannot delete messages he doesn't own."
+
+    if (messages.deleteMessage(id)) {
+        event.emit("del", id);
+        res.write(JSON.stringify(true));
+      
     } else
-        res.end(JSON.stringify(false));
+        res.write(JSON.stringify(false));
+    res.statusCode=200;
+    res.end();
+    console.log("deleteMessage_end");
 }
 
 function getStats(req, res, parsed_url) {
-
+    console.log("getStats_s");
     statEvent.once("stats", function (data) {
-        let re={
-            users: users.size,
-            messages: messages.count()
-        }
-        console.log(re);
-        res.end(JSON.stringify(
-            re
+        console.log("statEvent_s1");
+        res.statusCode=200;
+        res.write(JSON.stringify(
+            {
+                users: users.size,
+                messages: messages.count()
+            }
         ));
+        res.end();
+        console.log("statEvent_end1");
     });
+  
+    console.log("getStats_end");
 }
 function login(req, res, parsed_url) {
-    console.log("fdfdfdf");
+    console.log("login_s");
     //console.log(req.body);
    // users.add(req.body.uid);
     statEvent.emit("stats", "");
+    res.statusCode =200;
     res.end();
+    console.log("login_end");
 }
 function logout(req, res, parsed_url) {
     //users.delete(req.body.uid);
     //statEvent.emit("stats", "");
+    console.log("logout_s");
     res.end();
+    console.log("logout_end");
 }
 
 http.createServer(function (req, res) {
     res.setHeader('Access-Control-Allow-Origin','*');
     if (req.method == "OPTIONS") {
-        console.log("OPTIONS OPTIONS OPTIONS");
+        console.log("OPTIONS ://");//console.log(url.parse(req.url));
         res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
         res.setHeader('Access-Control-Allow-Headers', 'x-request-id,Content-Type, Authorization, Content-Length, X-Requested-With,Access-Control-Allow-Headers,Access-Control-Request-Method');   
         res.statusCode = 204;
@@ -140,8 +160,8 @@ http.createServer(function (req, res) {
     if (parsed_url.parts.length < 1)
         return res.end();
 
-    // switch-case
-    console.log(parsed_url.parts[0]);
+    //default init statusCode
+   
     switch (parsed_url.parts[0]) {
         case "messages":
             switch (req.method) {
@@ -155,7 +175,8 @@ http.createServer(function (req, res) {
                     deleteMessage(req, res, parsed_url);
                     break;
                 default:
-                    // 405
+                res.statusCode = 405;
+                return res.end();
                     break;
             }
             break;
@@ -163,21 +184,31 @@ http.createServer(function (req, res) {
         case "stats":
             if (req.method == "GET")
                 getStats(req, res, parsed_url);
-            // 405
+            else{
+                res.statusCode = 405;
+                return res.end();
+            }
             break;
         case "login":
             if (req.method == "POST")
                 login(req, res, parsed_url);
-            // 405
+            else{
+                res.statusCode = 405;
+                return res.end();
+            }
         case "logout":
             if (req.method == "POST") 
                 logout(req, res, parsed_url);
-            // 405
+            else{
+                res.statusCode = 405;
+                return res.end();
+            }
         default:
-            // 404.
-            
+            res.statusCode = 404;
+            return res.end();
             break;
     }
+  
 
 }).listen(9000, 'localhost');
 console.log('Server running.');

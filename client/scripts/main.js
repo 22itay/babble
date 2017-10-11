@@ -35,7 +35,7 @@ var Babble = {
     deleteMessage: function (id, callback) {//id:String, callback:Function
         Babble.request({
             method: 'DELETE',
-            action: '/messages/:' + id,
+            action: '/messages/' + id,
             request_id: Babble.sessionData.uid,
             data: ''
         }).then(function(data) {
@@ -98,9 +98,11 @@ Babble.register=function (userInfo) {
 };
 Babble.polling= function(){
     Babble.getMessages(Babble.counter, function (data) {
+        console.log("all");
+        console.log(data);
         if(data!=undefined&&data!="")
         {
-            console.log(data);
+            console.log("good");
             if (data.delete)
                 Babble.chatWindow.removeChild(document.getElementById("msg-" + data.id));
             else 
@@ -123,13 +125,14 @@ function addMessageDOM(message) {
     let date = new Date(message.timestamp * 1);
     // handle button code
     if (message.name !== "" && message.email !== "") {
+
     } else {
         message.name = "Anonymous";
         message.imageUrl = "./images/anon.png";
     }
     
     let buttoncode = "";
-    if (message.uid ===Babble.sessionData.uid) {
+    if (message.email ===Babble.sessionData.userInfo.email) {
         buttoncode = "\n<button class=\"Message-deleteBtn js-deleteMsgBtn\" aria-label=\"Delete Message #" + message.id + "\">X</button>";
     }
 
