@@ -6,13 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Babble - Vegans</title>
-   
+    <link rel="stylesheet" href="styles/main.css">
 </head>
 
 <body>
     <div class="FlexGrid u-fullSize">
         <header class="Head u-fullwidth">
-            <img src="images/logo.png" class="Head-logo">
+            <img src="images/logo.png" class="Head-logo" aria-label="Babble" alt="Logo">
             <h1 class="Head-title u-hiddenReadeable">Babble</h1>
         </header>
         <!-- /header -->
@@ -29,7 +29,7 @@
                             <span class="u-hidden">Messages: </span>
                         </dt>
                         <dd>
-                            <img src="images/chat.svg" class="ChatStats-img" />
+                            <img src="images/chat.svg" class="ChatStats-img" alt=""/>
                             <span class="ChatStats-text" id="js-stats-messages">0</span>
                         </dd>
 
@@ -37,7 +37,7 @@
                             <span class="u-hidden">People: </span>
                         </dt>
                         <dd>
-                            <img src="images/person.svg" class="ChatStats-img ChatStats-img--person" />
+                            <img src="images/person.svg" class="ChatStats-img ChatStats-img--person" alt="" />
                             <span class="ChatStats-text" id="js-stats-people">0</span>
                         </dd>
                     </dl>
@@ -50,9 +50,9 @@
                 <!-- /chatview -->
 
                 <form id="js-ChatSubmit-form" method="POST" class="ChatSubmit">
-                        <label for="js-newMessage-area" class="u-display-hidden">Message Contents</label>
+                    <label for="js-newMessage-area" class="u-display-hidden">Message Contents</label>
                     <textarea id="js-newMessage-area" class="ChatSubmit-text" tabindex="0"></textarea>
-                    <button type="submit" src="images/send.png" class="ChatSubmit-submit js-submit" aria-label="Submit" />
+                    <button type="submit" class="ChatSubmit-submit js-submit" aria-label="Submit" ></button>
                 </form>
                 <!-- /sendmessage -->
             </main>
@@ -61,17 +61,6 @@
      
     </div>
 
-    <!--<div class="ModalContainer u-hidden" tabindex="1">
-        <section class="Modal">
-            <header class="ModalHeader FlexGrid-row">
-                <h1 class="ModalHeader-title">
-                    Example Modal
-                </h1>
-
-                <button class="ModalHeader-xbtn" aria-label="Close">X</button>
-            </header>
-        </section>
-    </div>-->
     <!-- /modal -->
 <!-- SignupDialog -->
 <div class="SignupDialog-container" id="js-signupDialog">
@@ -96,9 +85,7 @@
     </div>
 </div>
 <!-- /SignupDialog -->
-<link rel="stylesheet" href="styles/main.css">
-    <script src="scripts/main.js"></script>
-
+<script async src="scripts/main.js"></script>
 </body>
 
 </html>

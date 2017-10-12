@@ -5,7 +5,6 @@
   "main": "index.js",
   "dependencies": {
     "concurrently": "^3.5.0",
-    "http-server": "^0.10.0",
     "md5": "^2.2.1"
   },
   "devDependencies": {
@@ -17,7 +16,7 @@
   },
   "scripts": {
     "start": "concurrently \"node \\\"server/main.js\\\"\" \"http-server \\\"client/\\\"\"",
-    "test": "concurrently \"mocha --recursive \\\"test/server\\\"\" \"http-server -p 8081\"",
+    "test": "mocha test/server & http-server -p 8081",
     "client": "http-server \"client/\"",
     "client-test": "http-server -p 8081",
     "server": "node \"server/main.js\"",

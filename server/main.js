@@ -110,7 +110,7 @@ function getStats(req, res, parsed_url) {
 }
 function login(req, res, parsed_url) {
     console.log("login_s");
-   messages.users.add();//email
+   messages.users.add("123");//email
     statEvent.emit("upStats", "");
     res.statusCode =200;
     res.end();
@@ -118,7 +118,7 @@ function login(req, res, parsed_url) {
 }
 function logout(req, res, parsed_url) {
     //users.delete(req.body.uid);
-    messages.users.delete();//email
+    messages.users.delete("123");//email
     statEvent.emit("upStats", "");
     console.log("logout_s");
     res.end();
