@@ -7,7 +7,6 @@ let query = require('querystring');
 let md5 = require("md5");
 let events = require("events");
 let messages = require("./messages-util")
-let users = new Set();
 
 // event emitters
 let event = new events.EventEmitter();
@@ -18,26 +17,22 @@ statEvent.setMaxListeners(0);
 function getMessages(req, res, parsed_url) {
     console.log("getMessages_s");
     let x = parsed_url.query.counter;
+    console.log(x);
     if (!x || isNaN(x)){
         res.statusCode =405;
         return res.end();
     }
     else {
         res.statusCode =200;
-        if (+x >= messages.count()) {
+        if (messages.count() > +x)
+            res.end(JSON.stringify(messages.getMessages(+x)));
+        else {
             event.once("deleteMS", function (mesId) {
-                statEvent.emit("upStats", "");
-                //res.write();
                 res.end(JSON.stringify({ delete: true, id: mesId }));
             });
             event.once("addMS", function (mes) {
-                //mes=mes||{};
-                //res.write();
                 res.end(JSON.stringify([mes]));
             });
-        }
-        else {
-            res.write(JSON.stringify(messages.getMessages(+x)));
         }
         statEvent.emit("upStats", "");
     }
@@ -67,33 +62,24 @@ function postMessage(req, res, parsed_url) {
         //messages.setSender(message.id, message.uid);//////
         message.imageUrl =getGravatar(message.email);
      
-
+        // notify all
         event.emit("addMS", message);
         statEvent.emit("upStats");
     
-        // notify submitter
+        // notify sender
         res.write(JSON.stringify({ id: String(message.id) }));
         res.statusCode =200;
         res.end();
         console.log("postMessage_end");
     });
-
-
-    //////////////////////////////////////////////
-    // get message and add it to DB
-    
-    // notify all users
-   
 }
 
 function deleteMessage(req, res, parsed_url) {
     console.log("deleteMessage_s");
     let id=+parsed_url.parts[1];
     console.log(id);
-    if(!id||!Number.isInteger(id)){
-
+    if(!Number.isInteger(id)){
         res.statusCode=405;
-        //res.write();
         return res.end(JSON.stringify(false));
     }
 
@@ -110,26 +96,21 @@ function deleteMessage(req, res, parsed_url) {
 }
 
 function getStats(req, res, parsed_url) {
-    console.log("getStats_s");
     statEvent.once("upStats", function (data) {
-        console.log("statEvent_s1");
         res.statusCode=200;
-        res.write(JSON.stringify(
+        res.end(JSON.stringify(
             {
-                users: users.size,
+                users: messages.users.size,
                 messages: messages.count()
             }
         ));
-        res.end();
-        console.log("statEvent_end1");
     });
   
     console.log("getStats_end");
 }
 function login(req, res, parsed_url) {
     console.log("login_s");
-    //console.log(req.body);
-   // users.add(req.body.uid);
+   messages.users.add();//email
     statEvent.emit("upStats", "");
     res.statusCode =200;
     res.end();
@@ -137,7 +118,8 @@ function login(req, res, parsed_url) {
 }
 function logout(req, res, parsed_url) {
     //users.delete(req.body.uid);
-    //statEvent.emit("upStats", "");
+    messages.users.delete();//email
+    statEvent.emit("upStats", "");
     console.log("logout_s");
     res.end();
     console.log("logout_end");

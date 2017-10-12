@@ -18,13 +18,16 @@ function deleteMessage(id) {
     }
     return false;
 }
+let userss = new Set();
 
 module.exports = {
     addMessage: addMessage,
     getMessages: getMessages,
     deleteMessage: deleteMessage,
-    count: () => messages.length
+    count: () => messages.length,
+    users: userss
 }
 let lastMsId = -1;
 let messages = [];
+
 let d = { name: "String", email: "String", message: "String", timestamp: "Number(ms)" } 
