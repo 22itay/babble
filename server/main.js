@@ -109,13 +109,25 @@ function login(req, res, parsed_url) {
 }
 function logout(req, res, parsed_url) {
     console.log("logout");
-    console.log(req.headers["x-request-id"]);
-    
-    messages.users.delete(req.headers["x-request-id"]);//email
-    console.log(messages.users);
-    statEvent.emit("upStats", "");
-    res.statusCode =200;
-    res.end();
+    let body = [];    
+    req.on('data', (chunk) => {
+        body.push(chunk);
+            // Too much POST data, kill the connection!
+            // 1e6 === 1 * Math.pow(10, 6) === 1 * 1000000 ~~~ 1MB
+            if (body.length > 1e6)
+            request.connection.destroy();
+    }).on('end', () => {
+        // at this point, `body` has the entire request body stored in it as a string
+        // here
+        body = Buffer.concat(body).toString();        
+        let email = JSON.parse(body);
+        messages.users.delete(email);//email
+        console.log(messages.users);
+        statEvent.emit("upStats", "");
+        res.statusCode =200;
+        res.end();
+    });
+   
 }
 
 http.createServer(function (req, res) {
