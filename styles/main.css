@@ -6,7 +6,8 @@
   -webkit-padding-start: 0;
   -webkit-padding-end: 0;
   margin: 0;
-  padding: 0; }
+  padding: 0;
+  box-sizing: border-box; }
 
 html, body {
   height: 100%;
@@ -20,6 +21,16 @@ body {
 .u-hidden {
   display: none;
   visibility: hidden; }
+
+.u-display-hidden {
+  position: absolute;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  width: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0; }
 
 .u-hiddenReadeable {
   display: none; }
@@ -175,9 +186,10 @@ body {
 .Message {
   display: flex;
   padding: 1rem; }
-  .Message-im {
+  .Message-image {
     height: 3rem;
-    border-radius: 3rem; }
+    border-radius: 3rem;
+    border-radius: 50%; }
   .Message-author {
     color: #202729;
     text-decoration: none;
@@ -191,48 +203,52 @@ body {
     border-width: 0px;
     background: transparent;
     font-weight: bold;
-    margin-left: auto; }
-
-.MessageInner {
-  border: 1px solid #d7d7d7;
-  background: #ffffff;
-  margin-left: 1rem;
-  border-radius: 0.5rem;
-  padding: 1rem;
-  margin-right: 40px; }
-  .MessageInner .MessageInner-top {
+    margin-left: auto;
+    width: 1rem;
+    height: 1rem; }
+  .Message-inner {
+    display: block;
+    background: #fff;
+    border: 1px solid #d7d7d7;
+    padding: 0.5rem;
+    border-radius: 1rem; }
+  .Message-inner-top {
     display: flex;
     align-content: center;
     width: 100%; }
+  .Message-contents {
+    max-width: 600px;
+    word-break: break-all;
+    white-space: pre-line; }
 
-.ChatSubmit {
-  height: 200px;
+.ChatSubmit-form {
+  max-height: 100%;
+  width: 100%;
+  padding: 0;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0 1rem; }
-  .ChatSubmit-text {
-    height: calc(100% - 5rem);
-    width: 80%;
-    padding: 0.5rem;
-    color: inherit;
-    font-family: inherit;
-    font-size: inherit;
-    resize: none;
-    border-radius: 0.5rem;
-    border: 1px solid #d7d7d7; }
-    .ChatSubmit-text:focus {
-      outline: none;
-      border: 1px solid #4D90FE; }
-  .ChatSubmit-submit {
-    background: transparent url(../images/send.png) no-repeat;
-    background-size: contain;
-    background-position: middle center;
-    border-width: 0px;
-    width: 10%;
-    max-width: 80px;
-    height: calc(85% - 5rem);
-    margin-left: 1rem; }
+  align-items: center; }
+
+.ChatSubmit-text {
+  max-height: 300px;
+  height: 100%;
+  font-family: inherit;
+  font-size: 1rem;
+  padding: 1rem;
+  flex: 1;
+  resize: none;
+  width: auto;
+  border-width: 0px;
+  border-radius: 0px; }
+
+.ChatSubmit-submit {
+  background: transparent url(../images/send.png) no-repeat;
+  background-size: contain;
+  background-position: center center;
+  border-width: 0px;
+  width: 10%;
+  max-width: 80px;
+  height: 80px;
+  margin-left: 1rem; }
 
 @media only screen and (min-width: 638px) {
   .Nav {
@@ -242,14 +258,11 @@ body {
     border: 1px solid #d7d7d7;
     background: #fff;
     margin: 0;
-    height: 100%;
-    max-height: 100px; }
+    width: 100%;
+    height: 100px;
+    max-height: 300px; }
     .ChatSubmit-text {
-      flex: 1;
-      width: auto;
-      height: calc(100% - 1em);
-      border-width: 0px;
-      border-radius: 0px; }
+      border: 1px solid #d7d7d7; }
     .ChatSubmit-submit {
       min-height: 80%;
       max-height: 150px;
