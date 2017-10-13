@@ -90,48 +90,59 @@ body {
 .u-flexRight {
   margin-right: auto; }
 
-.ModalContainer {
+.SignupModal-Container {
   position: fixed;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.4);
   z-index: 5;
   /* Sit on top */
   left: 0;
   top: 0;
   width: 100%;
-  /* Full width */
   height: 100%;
-  /* Full height */
+  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: center; }
 
-.Modal {
-  min-height: 25rem;
-  min-width: 37.5rem;
+.SignupModal {
+  max-height: 300px;
+  max-width: 550px;
+  width: 80%;
+  height: 65%;
   background: #f9f9f9;
   box-shadow: 0px 0px 50px 0px rgba(0, 0, 0, 0.2);
-  border-radius: 1rem; }
-
-.ModalHeader {
-  border-top-left-radius: 1rem;
-  border-top-right-radius: 1rem;
-  height: 2rem;
-  background: #353744;
-  color: #f9f9f9;
-  padding: 1rem; }
-  .ModalHeader-title {
-    font-weight: normal;
+  border-radius: 1rem;
+  padding: 2rem; }
+  .SignupModal-form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%; }
+    .SignupModal-form-item {
+      flex-direction: row;
+      align-items: center;
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      margin: 1em 0; }
+    .SignupModal-form-item--last {
+      justify-content: flex-end; }
+  .SignupModal input, .SignupModal button {
+    border: 1px solid #d7d7d7;
+    font-family: Nunito, sans-serif;
+    padding: 0.45rem;
+    margin: 0.45rem;
+    font-weight: bold; }
+  .SignupModal input {
+    width: 80%; }
+  .SignupModal-Header {
     flex: 1; }
-  .ModalHeader-xbtn {
-    background: transparent;
-    border: solid 1px #f9f9f9;
+  .SignupModal-xbtn {
     border-radius: 0.25rem;
-    color: #f9f9f9;
-    width: 2rem;
-    height: 2rem; }
-    .ModalHeader-xbtn:hover {
+    color: #b5b5b5; }
+    .SignupModal-xbtn:hover {
       background: #62657d; }
-    .ModalHeader-xbtn:active {
+    .SignupModal-xbtn:active {
       background: #4b4e61; }
 
 body {

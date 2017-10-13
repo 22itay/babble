@@ -51,7 +51,7 @@
 
                 <form id="js-ChatSubmit-form" method="POST" class="ChatSubmit-form">
                     <label for="js-newMessage-area" class="u-display-hidden">Message Contents</label>
-                    <textarea id="js-newMessage-area" class="ChatSubmit-text" tabindex="0"></textarea>
+                    <textarea placeholder="your message..." id="js-newMessage-area" class="ChatSubmit-text" tabindex="0"></textarea>
                     <button type="submit" class="ChatSubmit-submit js-submit" aria-label="Submit" ></button>
                 </form>
                 <!-- /sendmessage -->
@@ -62,29 +62,29 @@
     </div>
 
     <!-- /modal -->
-<!-- SignupDialog -->
-<div class="SignupDialog-container" id="js-signupDialog">
-    <div class="SignupDialog">
-        <h2 class="SignupDialog-header">
+<!-- SignupModal -->
+<div class="SignupModal-Container" id="js-SignupModal">
+    <div class="SignupModal">
+        <h2 class="SignupModal-Header">
             Who are you?
         </h2>
-        <form method="post" class="SignupDialog-form">
-            <div class="SignupDialog-formRow">
+        <form method="post" class="SignupModal-form">
+            <div class="SignupModal-form-item">
                 <label for="signup-fullname">Full name:</label>
                 <input type="text" id="signup-fullname" name="signup-fullname" value="Alex Krul" />
             </div>
-            <div class="SignupDialog-formRow">
+            <div class="SignupModal-form-item">
                 <label for="signup-email">Email: </label>
                 <input type="email" id="signup-email" name="signup-email" value="alex_krul@gmail.com" />
             </div>
-            <div class="SignupDialog-formRow SignupDialog-formRow--last">
-                <button type="button" class="SignupDialog-cancelBtn" id="js-stayAnonBtn">Stay Anonymous</button>
-                <button type="submit" class="SignupDialog-submitBtn" id="js-loginBtn">Save</button>
+            <div class="SignupModal-form-item SignupModal-form-item--last">
+                <button type="button" class="SignupModal-xbtn" id="js-stayAnonBtn">Stay Anonymous</button>
+                <button type="submit" class="SignupModal-xbtn" id="js-loginBtn">Save</button>
             </div>
         </form>
     </div>
 </div>
-<!-- /SignupDialog -->
+<!-- /SignupModal -->
 <script src="scripts/main.js"></script>
 </body>
 
