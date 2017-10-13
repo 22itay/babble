@@ -1,47 +1,74 @@
-.ModalContainer {
+.SignupModal-Container {
     position: fixed;
-    background-color: rgba(0,0,0,0.2);
+    background-color: rgba(0,0,0,0.4);
 
     z-index: 5; /* Sit on top */
     left: 0;
     top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
+    width: 100%;
+    height: 100%; 
 
+
+    margin: 0 auto;
     display: flex;
-  align-items: center;
-  justify-content: center;
-
+    align-items: center;
+    justify-content: center;
+    
 }
 
-.Modal {
-    min-height: $babble-modal-minheight;
-    min-width: $babble-modal-minwidth;
+.SignupModal {
+    max-height:$babble-modal-maxheight;
+    max-width:$babble-modal-maxwidth;
+    //min-height: $babble-modal-minheight;
+    //min-width: $babble-modal-minwidth;
+    width: 80%;
+    height: 65%; 
     background: $babble-light;
     box-shadow: 0px 0px 50px 0px rgba(0, 0, 0, 0.2);
     border-radius: $babble-modal-radius;
-}
+    padding: 2rem;
 
-.ModalHeader {
-    border-top-left-radius: $babble-modal-radius;
-    border-top-right-radius: $babble-modal-radius;
-    height: $babble-modal-head-height;
-    background: $babble-dark;
-    color: $babble-light;
-    padding: 1rem;  
+    &-form{
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 100%;
 
-    &-title {
-        font-weight: normal;
+        &-item{
+            flex-direction: row;
+            align-items: center;
+
+            display: flex;
+            //flex-direction: column;
+            justify-content: space-between;
+            width: 100%;
+            margin: 1em 0;
+           
+        }
+        &-item--last{
+            justify-content: flex-end;
+        }
+
+    }
+    input, button {
+        border: 1px solid $babble-border;
+        font-family: $babble-font-family;
+        padding: 0.45rem;
+        margin: 0.45rem;
+          font-weight: bold;
+      }
+      input{
+        width: 80%;
+      }
+
+    &-Header {
         flex: 1;
     }
-
+    
     &-xbtn {
-        background: transparent;
-        border: solid 1px $babble-light;
+        //background: transparent;
         border-radius: 0.25rem;
-        color: $babble-light;
-        width: 2rem;
-        height: 2rem;
+        color: #b5b5b5;//$babble-light;
         &:hover {
             background: lighten($babble-dark, 20%);
         }
@@ -50,4 +77,9 @@
             background: lighten($babble-dark, 10%);
         }
     }
+
+    // &-submitBtn{
+    //     @include buttonGrad(#7cd650,#48a371);
+    //     color: #ffffff;
+    // }
 }
