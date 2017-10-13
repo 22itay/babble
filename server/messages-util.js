@@ -1,9 +1,7 @@
 'use strict';
 function addMessage(message) {
-
     message.id = ++lastMsId;
     messages.push(message);
-
     // return the msId.
     return lastMsId;
 }
@@ -18,6 +16,13 @@ function deleteMessage(id) {
     }
     return false;
 }
+function getMessageEmailbyid(id) {
+    let msId = messages.findIndex(ms => ms.id === +id);
+    if (msId != -1) {
+        return messages[msId].email;
+    }
+    return "notfound";
+}
 let userss = new Set();
 
 module.exports = {
@@ -25,9 +30,8 @@ module.exports = {
     getMessages: getMessages,
     deleteMessage: deleteMessage,
     count: () => messages.length,
-    users: userss
+    users: userss,
+    getMessageEmailbyid: getMessageEmailbyid
 }
 let lastMsId = -1;
 let messages = [];
-
-let d = { name: "String", email: "String", message: "String", timestamp: "Number(ms)" } 

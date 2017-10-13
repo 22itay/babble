@@ -11,15 +11,13 @@ let messages = require("./messages-util")
 // event emitters
 let event = new events.EventEmitter();
 let statEvent = new events.EventEmitter();
-event.setMaxListeners(0);
-statEvent.setMaxListeners(0);
+event.setMaxListeners(Infinity);
+statEvent.setMaxListeners(Infinity);
 
 function getMessages(req, res, parsed_url) {
-    console.log("getMessages_s");
     let x = parsed_url.query.counter;
-    console.log(x);
     if (!x || isNaN(x)){
-        res.statusCode =405;
+        res.statusCode =400;
         return res.end();
     }
     else {
@@ -27,14 +25,13 @@ function getMessages(req, res, parsed_url) {
         if (messages.count() > +x)
             res.end(JSON.stringify(messages.getMessages(+x)));
         else {
-            event.once("deleteMS", function (mesId) {
-                res.end(JSON.stringify({ delete: true, id: mesId }));
-            });
             event.once("addMS", function (mes) {
                 res.end(JSON.stringify([mes]));
             });
+            event.once("deleteMS", function (id) {
+                res.end(JSON.stringify({ delete: true, msid:id  }));
+            });
         }
-        statEvent.emit("upStats", "");
     }
 }
 
@@ -53,23 +50,17 @@ function postMessage(req, res, parsed_url) {
         // at this point, `body` has the entire request body stored in it as a string
         // here
         body = Buffer.concat(body).toString();        
-        req.body = JSON.parse(body);
-        console.log("data-")
-        console.log(req.body);
-        messages.addMessage(req.body);
-        let message = req.body;
-        //message.uid = req.headers("X-Request-Id");
-        //messages.setSender(message.id, message.uid);//////
+        let message = JSON.parse(body);
         message.imageUrl =getGravatar(message.email);
-     
+        messages.addMessage(message);
+       
         // notify all
         event.emit("addMS", message);
         statEvent.emit("upStats");
     
         // notify sender
-        res.write(JSON.stringify({ id: String(message.id) }));
         res.statusCode =200;
-        res.end();
+        res.end(JSON.stringify({ id: String(message.id) }));
         console.log("postMessage_end");
     });
 }
@@ -78,16 +69,16 @@ function deleteMessage(req, res, parsed_url) {
     console.log("deleteMessage_s");
     let id=+parsed_url.parts[1];
     console.log(id);
-    if(!Number.isInteger(id)){
-        res.statusCode=405;
+    console.log(req.headers["x-request-id"]);
+    if(!Number.isInteger(id)||req.headers["x-request-id"]!==messages.getMessageEmailbyid(id)){
+        res.statusCode=400;
         return res.end(JSON.stringify(false));
     }
-
-   // messages.find(id).getSender() === req.get("X-Request-Id")//"user cannot delete messages he doesn't own."
 
     res.statusCode=200;
     if (messages.deleteMessage(id)) {
         event.emit("deleteMS", id);
+        statEvent.emit("upStats");        
         res.end(JSON.stringify(true));
       
     } else
@@ -105,30 +96,32 @@ function getStats(req, res, parsed_url) {
             }
         ));
     });
-  
-    console.log("getStats_end");
 }
 function login(req, res, parsed_url) {
-    console.log("login_s");
-   messages.users.add("123");//email
+    console.log("login");
+    console.log(req.headers["x-request-id"]);
+    
+    messages.users.add(req.headers["x-request-id"]);//email
+    console.log(messages.users);
     statEvent.emit("upStats", "");
     res.statusCode =200;
     res.end();
-    console.log("login_end");
 }
 function logout(req, res, parsed_url) {
-    //users.delete(req.body.uid);
-    messages.users.delete("123");//email
+    console.log("logout");
+    console.log(req.headers["x-request-id"]);
+    
+    messages.users.delete(req.headers["x-request-id"]);//email
+    console.log(messages.users);
     statEvent.emit("upStats", "");
-    console.log("logout_s");
+    res.statusCode =200;
     res.end();
-    console.log("logout_end");
 }
 
 http.createServer(function (req, res) {
     res.setHeader('Access-Control-Allow-Origin','*');
     if (req.method == "OPTIONS") {
-        console.log("OPTIONS ://");//console.log(url.parse(req.url));
+        //console.log("OPTIONS ://");//console.log(url.parse(req.url));
         res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
         res.setHeader('Access-Control-Allow-Headers', 'x-request-id,Content-Type, Authorization, Content-Length, X-Requested-With,Access-Control-Allow-Headers,Access-Control-Request-Method');   
         res.statusCode = 204;
@@ -140,9 +133,11 @@ http.createServer(function (req, res) {
     parsed_url.parts = parsed_url.pathname.split("/").filter(item => item);
 
     // 
+    res.statusCode = 404;
     if (parsed_url.parts.length < 1)
         return res.end();
-
+    if (parsed_url.parts.length > 1&&req.method != "DELETE"&&parsed_url.parts[0]!=messages)
+        return res.end();
     //default init statusCode
    
     switch (parsed_url.parts[0]) {
@@ -179,6 +174,7 @@ http.createServer(function (req, res) {
                 res.statusCode = 405;
                 return res.end();
             }
+            break;
         case "logout":
             if (req.method == "POST") 
                 logout(req, res, parsed_url);
