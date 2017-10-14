@@ -25,6 +25,7 @@ window.Babble = {
         Babble.request({
             method: 'GET',
             action: '/messages?counter=' + Babble.counter,
+            //timeout:2*60*1000,
             data: ''
         },callback);
     },
@@ -47,6 +48,7 @@ window.Babble = {
         Babble.request({
             method: 'GET',
             action: '/stats',
+            //timeout:2*60*1000,
             data: ''
         },callback);
     }
@@ -61,11 +63,15 @@ window.Babble = {
             if (options.request_id) {
                 xhr.setRequestHeader("X-Request-Id", options.request_id);
             }
+            if (options.timeout) {
+                console.log(options.timeout);
+                xhr.timeout=options.timeout;
+            }
             xhr.withCredentials=false;
             xhr.addEventListener('loadend', e => {
                 //resolve(e.target.responseText);
-                if(e.target.status != 200){
-                    console.log("request returnd white error codefgdfgdg "+ e.target.status);
+                if(e.target.status != 200&&e.target.status != 202){
+                    console.log("request returnd white error  "+ e.target.status);
                 }else{
                     if (callback){
                     if(e.target.responseText != '') 
@@ -82,7 +88,8 @@ window.Babble = {
 
 Babble.polling= function(){
     Babble.getMessages(Babble.counter, function (data) {
-        if(data!=undefined&&data!="")
+        console.log(data.timeout)
+        if(data!=undefined&&data!=""&&data.timeout == undefined)
         {
             if (data.delete)
                 Babble.chatWindow.removeChild(document.getElementById("msg-" + data.msid));
@@ -138,8 +145,11 @@ Babble.polling= function(){
 
 Babble.polling2= function(){
         Babble.getStats(function (data) {
+            console.log(data.timeout)
+            if(data.timeout ==undefined){
             Babble.statsMessages.innerHTML = data.messages;
             Babble.statsPeople.innerHTML = data.users;
+            }
            Babble.polling2();
         });
 }
@@ -155,7 +165,7 @@ Babble.onloadP=function(){
     let ChatSubmitForm = document.getElementById("js-ChatSubmit-form");
     Babble.chatWindow = document.getElementById("js-chatWindow");
     let textarea = document.getElementById("js-newMessage-area");
-    let signupDialog = document.getElementById("js-signupDialog");
+    let signupDialog = document.getElementById("js-SignupModal");
 
     Babble.statsMessages=document.getElementById("js-stats-messages");
     Babble.statsPeople=document.getElementById("js-stats-people");

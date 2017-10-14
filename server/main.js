@@ -139,6 +139,14 @@ http.createServer(function (req, res) {
         res.statusCode = 204;
         return res.end();
     }
+
+    setTimeout(function () {
+        console.log("timeout timeout");
+        console.log(req.url);        
+        res.statusCode = 202;
+        res.end(JSON.stringify({timeout:true}));
+    }, 2 * 60 * 1000);
+
     // url parsing
     let parsed_url = url.parse(req.url);
     parsed_url.query = query.parse(parsed_url.query);
