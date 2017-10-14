@@ -53,15 +53,12 @@ function postMessage(req, res, parsed_url) {
         let message = JSON.parse(body);
         message.imageUrl =getGravatar(message.email);
         messages.addMessage(message);
-       
         // notify all
         event.emit("addMS", message);
         statEvent.emit("upStats");
-    
         // notify sender
         res.statusCode =200;
         res.end(JSON.stringify({ id: String(message.id) }));
-        console.log("postMessage_end");
     });
 }
 
@@ -70,7 +67,9 @@ function deleteMessage(req, res, parsed_url) {
     let id=+parsed_url.parts[1];
     console.log(id);
     console.log(req.headers["x-request-id"]);
-    if(!Number.isInteger(id)||req.headers["x-request-id"]!==messages.getMessageEmailbyid(id)){
+    let email=req.headers["x-request-id"];
+    email=email.length>2?email:" ";
+    if(!Number.isInteger(id)||email!==messages.getMessageEmailbyid(id)){
         res.statusCode=400;
         return res.end(JSON.stringify(false));
     }
@@ -99,11 +98,11 @@ function getStats(req, res, parsed_url) {
 }
 function login(req, res, parsed_url) {
     console.log("login");
-    console.log(req.headers["x-request-id"]);
-    
-    messages.users.add(req.headers["x-request-id"]);//email
+    let id=req.headers["x-request-id"];
+    id=id.length>2?id:"anno";
+    messages.users.add(id);//email
     console.log(messages.users);
-    statEvent.emit("upStats", "");
+    statEvent.emit("upStats");
     res.statusCode =200;
     res.end();
 }
@@ -120,10 +119,11 @@ function logout(req, res, parsed_url) {
         // at this point, `body` has the entire request body stored in it as a string
         // here
         body = Buffer.concat(body).toString();        
-        let email = JSON.parse(body);
+        let email = JSON.parse(body).email;
+        email=email.length>2?email:"anno";
         messages.users.delete(email);//email
         console.log(messages.users);
-        statEvent.emit("upStats", "");
+        statEvent.emit("upStats");
         res.statusCode =200;
         res.end();
     });

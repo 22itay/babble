@@ -46,48 +46,7 @@
 
                 <ol class="ChatView" id="js-chatWindow">
                     <!-- /message -->
-                <li class="Message" id="msg-0">
-                                        <img src="https://www.gravatar.com/avatar/a14ec5877495b7f3d25a6eae4fa41db2" alt="" class="Message-image">
-                                        <section class="Message-inner" tabindex="0">
-                                            <header class="Message-inner-top FlexGridRow">
-                                                <cite class="Message-author">Alex Krul</cite>
-                                                <time class="Message-time" datetime="2017-10-14T14:47:21.638Z">17:47</time>
-                                                <button class="Message-delBtn js-delMsgBtn" aria-label="Delete Message #0">X</button>
-                                            </header>
-                                            <div class="Message-contents">
-                                                gfdgdg
-                                            </div>
-                                        </section>
-                                    </li><li class="Message" id="msg-1">
-                                        <img src="https://www.gravatar.com/avatar/a14ec5877495b7f3d25a6eae4fa41db2" alt="" class="Message-image">
-                                        <section class="Message-inner" tabindex="0">
-                                            <header class="Message-inner-top FlexGridRow">
-                                                <cite class="Message-author">Alex Krul</cite>
-                                                <time class="Message-time" datetime="2017-10-14T15:08:13.257Z">18:08</time>
-                                                <button class="Message-delBtn js-delMsgBtn" aria-label="Delete Message #1">X</button>
-                                            </header>
-                                            <div class="Message-contents">
-                                                עגעכגכע
-                                            </div>
-                                        </section>
-                                    </li><li class="Message" id="msg-2">
-                                        <img src="https://www.gravatar.com/avatar/a14ec5877495b7f3d25a6eae4fa41db2" alt="" class="Message-image">
-                                        <section class="Message-inner" tabindex="0">
-                                            <header class="Message-inner-top FlexGridRow">
-                                                <cite class="Message-author">Alex Krul</cite>
-                                                <time class="Message-time" datetime="2017-10-14T15:08:20.209Z">18:08</time>
-                                                <button class="Message-delBtn js-delMsgBtn" aria-label="Delete Message #2">X</button>
-                                            </header>
-                                            <div class="Message-contents">
-                                                י
-י
-י
-י
-י
-
-                                            </div>
-                                        </section>
-                                    </li></ol>
+                </ol>
                 <!-- /chatview -->
 
                 <form id="js-ChatSubmit-form" method="POST" class="ChatSubmit-form">
@@ -110,17 +69,17 @@
             Who are you?
         </h2>
         <form method="post" class="SignupModal-form">
-            <div class="SignupModal-form-item">
-                <label for="signup-fullname">Full name:</label>
-                <input type="text" id="signup-fullname" name="signup-fullname" value="Alex Krul" />
+            <div>
+                <label for="signup-name">Full name:</label>
+                <input type="text" id="signup-name" name="signup-name" value="Alex Krul" required />
             </div>
-            <div class="SignupModal-form-item">
+            <div>
                 <label for="signup-email">Email: </label>
-                <input type="email" id="signup-email" name="signup-email" value="alex_krul@gmail.com" />
+                <input type="email" id="signup-email" name="signup-email" value="alex_krul@gmail.com" required/>
             </div>
-            <div class="SignupModal-form-item SignupModal-form-item--last">
-                <button type="button" class="SignupModal-xbtn" id="js-stayAnonBtn">Stay Anonymous</button>
-                <button type="submit" class="SignupModal-submit" id="js-loginBtn">Save</button>
+            <div>
+                <button type="button" class="SignupModal-anonBtn" id="js-AnonBtn">Stay Anonymous</button>
+                <button type="submit" class="SignupModal-submitBtn" id="js-loginBtn">Save</button>
             </div>
         </form>
     </div>
