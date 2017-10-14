@@ -19,8 +19,6 @@
 .SignupModal {
     max-height:$babble-modal-maxheight;
     max-width:$babble-modal-maxwidth;
-    //min-height: $babble-modal-minheight;
-    //min-width: $babble-modal-minwidth;
     width: 80%;
     height: 65%; 
     background: $babble-light;
@@ -34,18 +32,17 @@
         width: 100%;
         height: 100%;
 
-        &-item{
+        div{
             flex-direction: row;
             align-items: center;
-
             display: flex;
             //flex-direction: column;
             justify-content: space-between;
             width: 100%;
             margin: 1em 0;
-           
         }
-        &-item--last{
+
+        div:last-of-type{
             justify-content: flex-end;
         }
 
@@ -64,22 +61,31 @@
     &-Header {
         flex: 1;
     }
-    
-    &-xbtn {
-        //background: transparent;
-        border-radius: 0.25rem;
-        color: #b5b5b5;//$babble-light;
-        &:hover {
-            background: lighten($babble-dark, 20%);
-        }
 
+    &-submitBtn {
+        border-radius: 0.25rem;
+        background: #62bd61;
+        background: linear-gradient(to bottom, #7cd650, #48a371);
+        color: #ffffff; 
+        &:hover {
+            background: linear-gradient(to bottom, #9be079, #64ba8b);
+        }
         &:active {
-            background: lighten($babble-dark, 10%);
+            background: linear-gradient(to bottom, #60c52e, #388058);   
         }
     }
-
-    // &-submitBtn{
-    //     @include buttonGrad(#7cd650,#48a371);
-    //     color: #ffffff;
-    // }
+    
+    &-anonBtn {
+        border-radius: 0.25rem;
+        background: #c5c5c5;
+        background: linear-gradient(to bottom, #d4d4d4, #b5b5b5);
+        &:hover {
+            background: linear-gradient(to bottom, #eeeeee, #cfcfcf);
+        }
+        &:active {
+            background: linear-gradient(to bottom, #bbbbbb, #9c9c9c);   
+        }
+    }
 }
+
+
