@@ -26,7 +26,7 @@ function getMessages(req, res, parsed_url) {
             res.end(JSON.stringify(messages.getMessages(+x)));
         else {
             event.once("addMS", function (mes) {
-                res.end(JSON.stringify([mes]));
+                res.end(JSON.stringify([mes]) );
             });
             event.once("deleteMS", function (id) {
                 res.end(JSON.stringify({ delete: true, msid:id  }));
