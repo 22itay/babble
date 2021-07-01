@@ -25,16 +25,16 @@ window.Babble = {
         Babble.request({
             method: 'GET',
             action: '/messages?counter=' + Babble.counter,
-            timeout:2*60*1000,
+            timeout: 2 * 60 * 1000,
             data: ''
-        },callback);
+        }, callback);
     },
     postMessage: function (message, callback) {//message:Object, callback:Function
         Babble.request({
             method: 'POST',
             action: '/messages',
             data: JSON.stringify(message)//"{name:String, email:String, message:String, timestamp:Number(ms)}"
-        },callback);
+        }, callback);
     },
     deleteMessage: function (id, callback) {//id:String, callback:Function
         Babble.request({
@@ -42,65 +42,63 @@ window.Babble = {
             action: '/messages/' + id,
             request_id: Babble.sessionData.userInfo.email,
             data: ''
-        },callback);
+        }, callback);
     },
     getStats: function (callback) {//Function
         Babble.request({
             method: 'GET',
             action: '/stats',
-            timeout:2*60*1000,
+            timeout: 2 * 60 * 1000,
             data: ''
-        },callback);
+        }, callback);
     }
-    , request: function (options,callback) {
-            var xhr = new XMLHttpRequest();
-            
-            xhr.open(options.method, Babble.host+options.action);
-           
-            if (options.method === 'post') {
-                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-            }
-            if (options.request_id) {
-                xhr.setRequestHeader("X-Request-Id", options.request_id);
-            }
-            if (options.timeout) {
-                console.log(options.timeout);
-                xhr.timeout=options.timeout;
-            }
-            xhr.withCredentials=false;
-            xhr.onload = function (e){
-                 //resolve(e.target.responseText);
-                 if(e.target.status != 200&&e.target.status != 202){
-                    console.log("request returnd white error  "+ e.target.status);
-                }else{
-                    if (callback){
-                    if(e.target.responseText != '') 
+    , request: function (options, callback) {
+        var xhr = new XMLHttpRequest();
+
+        xhr.open(options.method, Babble.host + options.action);
+
+        if (options.method === 'post') {
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        }
+        if (options.request_id) {
+            xhr.setRequestHeader("X-Request-Id", options.request_id);
+        }
+        if (options.timeout) {
+            console.log(options.timeout);
+            xhr.timeout = options.timeout;
+        }
+        xhr.withCredentials = false;
+        xhr.onload = function (e) {
+            //resolve(e.target.responseText);
+            if (e.target.status != 200 && e.target.status != 202) {
+                console.log("request returnd white error  " + e.target.status);
+            } else {
+                if (callback) {
+                    if (e.target.responseText != '')
                         callback(JSON.parse(e.target.responseText));
                     else
-                    callback();
-                    }
+                        callback();
                 }
             }
-            xhr.ontimeout = function (e) {
-                console.log("ontimeout");
-                if (callback){
-                    callback({timeout:true});
-                }
-              };
-            xhr.send(options.data);
+        }
+        xhr.ontimeout = function (e) {
+            console.log("ontimeout");
+            if (callback) {
+                callback({ timeout: true });
+            }
+        };
+        xhr.send(options.data);
     }
 
-}; 
+};
 
-Babble.polling= function(){
+Babble.polling = function () {
     Babble.getMessages(Babble.counter, function (data) {
         console.log(data.timeout)
-        if(data!=undefined&&data!=""&&data.timeout == undefined)
-        {
+        if (data != undefined && data != "" && data.timeout == undefined) {
             if (data.delete)
                 Babble.chatWindow.removeChild(document.getElementById("msg-" + data.msid));
-            else 
-            {
+            else {
                 // update counter
                 Babble.counter += data.length;
                 //  display the message to client
@@ -109,15 +107,15 @@ Babble.polling= function(){
                         message.name = "Anonymous";
                         message.imageUrl = "./images/anon.png";
                     }
-                    
+
                     let deletebutton = "";
                     if (message.email === Babble.sessionData.userInfo.email) {
                         deletebutton = "\n<button class='Message-delBtn js-delMsgBtn' aria-label='Delete Message #" + message.id + "'>X</button>";
                     }
-                
+
                     console.log(message.message);
                     let date = new Date(message.timestamp * 1);
-                    let tempDiv=document.createElement("div");
+                    let tempDiv = document.createElement("div");
                     tempDiv.innerHTML = `<li class="Message" id="msg-${message.id}">
                                         <img src="${message.imageUrl}" alt="" class="Message-image" />
                                         <section class="Message-inner" tabindex="0">
@@ -137,7 +135,7 @@ Babble.polling= function(){
                             Babble.deleteMessage(message.id, function () { });
                         });
                     }
-                
+
                     // add message
                     Babble.chatWindow.appendChild(tempDiv.firstElementChild);
                     Babble.chatWindow.scrollTop = Babble.chatWindow.scrollHeight;
@@ -149,42 +147,42 @@ Babble.polling= function(){
     });
 }
 
-Babble.polling2= function(){
-        Babble.getStats(function (data) {
-            if(data.timeout == undefined){
+Babble.polling2 = function () {
+    Babble.getStats(function (data) {
+        if (data.timeout == undefined) {
             Babble.statsMessages.innerHTML = data.messages;
             Babble.statsPeople.innerHTML = data.users;
-            }
-           Babble.polling2();
-        });
+        }
+        Babble.polling2();
+    });
 }
 
-Babble.onloadP=function(){
+Babble.onloadP = function () {
     // localStorage
     let lastSession = JSON.parse(localStorage.getItem("babble"));
     if (lastSession)
         Babble.sessionData = lastSession;
     else
-    localStorage.setItem('babble', JSON.stringify(Babble.sessionData));
-    
+        localStorage.setItem('babble', JSON.stringify(Babble.sessionData));
+
     // DoM Elements
     Babble.chatWindow = document.getElementById("js-chatWindow");
-    Babble.statsMessages=document.getElementById("js-stats-messages");
-    Babble.statsPeople=document.getElementById("js-stats-people");
+    Babble.statsMessages = document.getElementById("js-stats-messages");
+    Babble.statsPeople = document.getElementById("js-stats-people");
     let loginBtn = document.getElementById("js-loginBtn");
     let anonBtn = document.getElementById("js-AnonBtn");
     let ChatSubmitForm = document.getElementById("js-ChatSubmit-form");
     let textarea = document.getElementById("js-newMessage-area");
     let SignupModal = document.getElementById("js-SignupModal");
-   
 
-    if(textarea){
+
+    if (textarea) {
         autoResize(textarea, 100, 300);
         // unload event listener
         window.addEventListener('beforeunload', function (event) {
             Babble.sessionData.currentMessage = textarea.value;
             localStorage.setItem('babble', JSON.stringify(Babble.sessionData));
-            navigator.sendBeacon(Babble.host+"/logout", JSON.stringify({ email: Babble.sessionData.userInfo.email }));
+            navigator.sendBeacon(Babble.host + "/logout", JSON.stringify({ email: Babble.sessionData.userInfo.email }));
         });
         // load event listener
         window.addEventListener('load', function (event) {
@@ -201,31 +199,31 @@ Babble.onloadP=function(){
         });
     }
 
-    if(ChatSubmitForm){
-        ChatSubmitForm.addEventListener("submit",function(e) {
+    if (ChatSubmitForm) {
+        ChatSubmitForm.addEventListener("submit", function (e) {
             e.preventDefault();
-    
-        if (textarea.value == "") {
-            alert("You can't send an empty message");
-            return;
-        }
-    
-        let message ={
-            name: Babble.sessionData.userInfo.name,
-            email: Babble.sessionData.userInfo.email,
-            message: textarea.value,
-            timestamp: Date.now().toString(),
-            id: 0
-        };
-        Babble.postMessage(message, function (data) {
-            textarea.value = "";
-            textarea.style.height = "auto";
+
+            if (textarea.value == "") {
+                alert("You can't send an empty message");
+                return;
+            }
+
+            let message = {
+                name: Babble.sessionData.userInfo.name,
+                email: Babble.sessionData.userInfo.email,
+                message: textarea.value,
+                timestamp: Date.now().toString(),
+                id: 0
+            };
+            Babble.postMessage(message, function (data) {
+                textarea.value = "";
+                textarea.style.height = "auto";
+            });
         });
-    });
     }
 
 
-    if(anonBtn){
+    if (anonBtn) {
         anonBtn.addEventListener("click", function (e) {
             e.preventDefault();
             Babble.polling2();
@@ -238,7 +236,7 @@ Babble.onloadP=function(){
         });
     }
 
-    if(loginBtn){
+    if (loginBtn) {
         loginBtn.addEventListener("click", function (e) {
             e.preventDefault();
             Babble.polling2();
@@ -250,7 +248,7 @@ Babble.onloadP=function(){
             SignupModal.classList.add("u-hidden");
         });
     }
-    
+
 };
 Babble.onloadP();
 
